@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.3.12'
+}
+
+group 'com.github.ethendev'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+}
+
+ext {
+    toolingApiVersion = '4.10.2'
+}
+
+dependencies {
+    compile "org.gradle:gradle-tooling-api:${toolingApiVersion}"
+}
+
+intellij {
+    version '2018.2.6'
+}
+
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
