@@ -1,7 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 plugins {
-    id 'java'
     id 'org.jetbrains.intellij' version '0.3.12'
 }
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+
+//intellij {
+//    version 'IU-182.2371.4'
+//}
 
 group 'com.github.ethendev'
 version '1.0-SNAPSHOT'
@@ -20,10 +33,6 @@ ext {
 
 dependencies {
     compile "org.gradle:gradle-tooling-api:${toolingApiVersion}"
-}
-
-intellij {
-    version '2018.2.6'
 }
 
 patchPluginXml {

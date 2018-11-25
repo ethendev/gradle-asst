@@ -19,7 +19,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Gradle Asst" anchor="bottom" factoryClass="com.github.ethendev.gradle.intellij.CustomToolWindowFactory" icon="/general/add.png"/>
+        <toolWindow id="Gradle Asst" anchor="bottom" factoryClass="com.github.ethendev.gradle.intellij.CustomToolWindowFactory" icon="/toolwindows/toolWindowHierarchy_dark.png"/>
     </extensions>
 
     <actions>
