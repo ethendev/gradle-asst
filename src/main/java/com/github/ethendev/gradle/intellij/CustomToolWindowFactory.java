@@ -30,6 +30,6 @@ public class CustomToolWindowFactory implements ToolWindowFactory {
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
         DependencyViewer dependencyViewer = new DependencyViewer(project, toolWindow);
         toolWindow.getContentManager().addContent(
-                ContentFactory.SERVICE.getInstance().createContent(dependencyViewer, "", false));
+                ContentFactory.SERVICE.getInstance().createContent(dependencyViewer.getContent(), "", false));
     }
 }

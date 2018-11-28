@@ -28,11 +28,10 @@ import org.gradle.tooling.model.idea.IdeaDependency;
 import org.gradle.tooling.model.idea.IdeaModule;
 import org.gradle.tooling.model.idea.IdeaProject;
 
+import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: Ethan
@@ -42,6 +41,7 @@ public class DependencyViewer extends SimpleToolWindowPanel {
 
     private final Project project;
     private final ToolWindow toolWindow;
+    private static Map<String, List<GradleModuleVersion>> map = Maps.newHashMap();
 
     public DependencyViewer(Project project, ToolWindow toolWindow) {
         super(true, true);
@@ -52,7 +52,6 @@ public class DependencyViewer extends SimpleToolWindowPanel {
                 .forProjectDirectory(new File(project.getBasePath()))
                 .connect();
         try {
-            Map<String, List<GradleModuleVersion>> map = Maps.newHashMap();
             IdeaProject iproject = connection.getModel(IdeaProject.class);
             for(IdeaModule module : iproject.getModules()) {
                 List<GradleModuleVersion> list = new ArrayList();
@@ -72,6 +71,21 @@ public class DependencyViewer extends SimpleToolWindowPanel {
         } finally {
             connection.close();
         }
-
     }
+
+    public JScrollPane getContent() {
+        JScrollPane jsp = new JScrollPane();
+        Set<String> set = new HashSet<>();
+        Optional.ofNullable(map.values()).ifPresent(e ->
+                e.parallelStream().forEach(x -> x.forEach(y -> {
+                    set.add(y.getGroup() + ":" + y.getName() + ":" + y.getVersion());
+                })));
+        JList<String> jlist = new JList<>();
+        jlist.setListData(set.stream().sorted().collect(Collectors.toList()).toArray(new String[0]));
+        jsp.setViewportView(jlist);
+        jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jsp.setBorder(null);
+        return jsp;
+    }
+
 }
