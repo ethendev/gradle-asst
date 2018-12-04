@@ -28,7 +28,7 @@ import com.intellij.ui.content.ContentFactory;
 public class CustomToolWindowFactory implements ToolWindowFactory {
 
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
-        DependencyViewer dependencyViewer = new DependencyViewer(project, toolWindow);
+        CustomToolWindow dependencyViewer = new CustomToolWindow(project, toolWindow);
         toolWindow.getContentManager().addContent(
                 ContentFactory.SERVICE.getInstance().createContent(dependencyViewer.getContent(), "", false));
     }

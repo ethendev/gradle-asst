@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.ethendev.gradle.intellij;
+package com.github.ethendev.gradle;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.openapi.wm.ToolWindow;
 import org.gradle.internal.impldep.com.google.common.collect.Maps;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
@@ -28,28 +26,23 @@ import org.gradle.tooling.model.idea.IdeaDependency;
 import org.gradle.tooling.model.idea.IdeaModule;
 import org.gradle.tooling.model.idea.IdeaProject;
 
-import javax.swing.*;
 import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author: Ethan
- * @Date: 2018/11/18
+ * @Date: 2018/12/13
  */
-public class DependencyViewer extends SimpleToolWindowPanel {
+public class GradleUtils {
 
-    private final Project project;
-    private final ToolWindow toolWindow;
-    private static Map<String, List<GradleModuleVersion>> map = Maps.newHashMap();
-
-    public DependencyViewer(Project project, ToolWindow toolWindow) {
-        super(true, true);
-        this.project = project;
-        this.toolWindow = toolWindow;
-
+    public static Map<String, List<GradleModuleVersion>> analysisDependencies(Project project) {
+        Map<String, List<GradleModuleVersion>> map = Maps.newHashMap();
         ProjectConnection connection = GradleConnector.newConnector()
                 .forProjectDirectory(new File(project.getBasePath()))
+                //.useGradleUserHomeDir(new File("D:\\DevTools\\gradle-4.10.2"))
                 .connect();
         try {
             IdeaProject iproject = connection.getModel(IdeaProject.class);
@@ -71,21 +64,7 @@ public class DependencyViewer extends SimpleToolWindowPanel {
         } finally {
             connection.close();
         }
-    }
-
-    public JScrollPane getContent() {
-        JScrollPane jsp = new JScrollPane();
-        Set<String> set = new HashSet<>();
-        Optional.ofNullable(map.values()).ifPresent(e ->
-                e.parallelStream().forEach(x -> x.forEach(y -> {
-                    set.add(y.getGroup() + ":" + y.getName() + ":" + y.getVersion());
-                })));
-        JList<String> jlist = new JList<>();
-        jlist.setListData(set.stream().sorted().collect(Collectors.toList()).toArray(new String[0]));
-        jsp.setViewportView(jlist);
-        jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        jsp.setBorder(null);
-        return jsp;
+        return map;
     }
 
 }
